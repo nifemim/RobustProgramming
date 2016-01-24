@@ -166,6 +166,8 @@ LTICKET create_list(void* head_data)
 	list->head = head;
 	list->ticket = ticket;
 
+	printf("**SUCCESSFULLY CREATED LINKED LIST WITH TICKET: %u**\n\n", ticket);
+
 	return ticket;
 }
 
@@ -193,6 +195,8 @@ int delete_list(LTICKET ticket)
 	free(list);
 	lists[index] = NULL;
 
+	printf("**SUCCESSFULLY DELETED LINKED LIST WITH TICKET: %u**\n\n", ticket);
+	printf("---\n\n");
 	return LE_NONE;
 }
 
@@ -259,6 +263,8 @@ int insert_head(LTICKET ticket, void* data)
 
 	list->head = node;
 
+	printf("SUCCESSFULLY INSERTED NEW HEAD: '%s' FOR LIST WITH TICKET: %u\n\n", data, ticket);
+
 	return LE_NONE;
 }
 
@@ -279,6 +285,8 @@ int remove_head(LTICKET ticket)
 
 	list->head = list->head->next;
 	free(prev_head);
+
+	printf("SUCCESSFULLY REMOVED HEAD OF LIST WITH TICKET: %u\n\n", ticket);
 
 	return LE_NONE;
 }
@@ -306,11 +314,14 @@ int remove_tail(LTICKET ticket)
 		LNODE *prev = cur;
 		cur = cur->next;
 		while(cur->next) {
+			prev = cur;
 			cur = cur->next;
 		}
 		free(cur);
 		prev->next = NULL;
 	}
+
+	printf("SUCCESSFULLY REMOVED TAIL OF LIST WITH TICKET: %u\n\n", ticket);
 
 	return LE_NONE;
 }
@@ -326,15 +337,15 @@ int visit_nodes(LTICKET ticket)
 
 	LNODE *node = list->head;
 
-	printf("\n%s\n\n", "PRINTING NODE DATA");
+	printf("PRINTING LIST DATA FOR TICKET: %u...\n\n\t", ticket);
+	
 	while(node) {
 		printf("%s", node->data);
 		node = node->next;
 		if(node)
 			printf("%s", " -> ");
 	}
-
-	printf("\n");
+	printf("\n\n");
 
 	return LE_NONE;
 }

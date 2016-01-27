@@ -1,5 +1,5 @@
 
-*** RUNNING PROGRAM ***
+*** RUNNING THE PROGRAM ***
 
 Run 'make' in the directory where the files are stored. To edit the exact gcc command, edit the makefile.
 
@@ -45,3 +45,8 @@ In my program, linked lists are stored, accessed, and modified using a ticketing
 	} LNODE;
 
 These structs are defined in linklib.c because neither the user nor routines outside of this file should have access to the structs or be able to modify their content/format. This addresses the dangerous implements and paranoia premises.
+Every linked list is stored in an array of LINKED_LIST structs defined as a static global variable - this restricts its scope to the file linklib.c, and thus provides it with more protection from routines outside of the file. The routines of my program used to access and modify particular linked lists are declared in linklib.h and defined in linklib.c. These routines NEVER accept or return an actual struct or an address of a struct and its data members. Instead, linked lists are accessed via tickets. These tickets are created in such a way that they contain specific unique indexes into the global array which contains all linked list structs. For instance, see below the definition of the delete_list procedure:
+	
+	int delete_list(LTICKET ticket);		/* delete a list */
+
+This procedure takes in a ticket number, checks if this ticket refers to a valid linked list, deletes the list, and then returns either an error or success code. Tickets are created as a 32 bit combination of two 16 bit numbers - the array index of the list and a nonce. A nonce is a unique ID. The reason for a nonce is that over the course of the program, it is possible that several linked lists would have occupied the same index in the array. So as not to confuse past linked lists with present linked lists, we identify each list with a new unique nonce. The index and nonce are combined into a single positive 32 bit number using an invertible function. To see the details of this function, read the routines create_ticket and read_ticket defined in linklib.c. These functions are defined in linklib.c so they are not accessible to outside routines.

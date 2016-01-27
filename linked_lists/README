@@ -1,1 +1,47 @@
 
+*** RUNNING PROGRAM ***
+
+Run 'make' in the directory where the files are stored. To edit the exact gcc command, edit the makefile.
+
+After running make, run 'main.exe' or the executable out file created on make.
+
+*** PREMISE ***
+
+This implementation of a linked list incorporates techniques described by Matt Bishop in his paper 'Robust Programming'. Of concern is how to structure files and design the content of their programs in such a way that "prevents abnormal termination of unexpected actions" and can "handle bad (invalid or absurd) inputs in a reasonable way". This implementation is premised on the principles of robust programming:
+- paranoia: don't trust anything you don't generate!
+- stupidity: assume the caller is "an idiot"
+- dangerous implements: anything that your routines expect to remain consistent across calls
+- 'can't happen': wrong, anything can happen
+
+Using this approach programming, I have implemented a safer, and more secure linked list than common implementations.
+
+*** SPECS ***
+
+1. Error handling and reporting
+
+On incident of error, my routines print informative messages to the screen, and return specific error codes.
+The error codes are defined as macros in linklib.h. For instance, if malloc fails, the error code 'LE_NOMEMORY' (defined as -2) is returned. The prefix LE stands for 'list errror'. All error code macros are negative ints; this way I can test if a routine returns an error using the simple check:
+
+	#define LE_ISERROR(x) ((x) < 0)
+
+The error messages printed to the screen are written into a global extern buffer variable 'le_errbuf' which is defined in linklib.h. For instance, if malloc returns an error in the routine create_list, the error buffer is filled with the string:
+
+	"create_list: error allocating memory for list"
+
+This combination of error codes and printed error messages keeps users informed of what exactly went wrong with their program.
+
+2. Tickets
+
+In my program, linked lists are stored, accessed, and modified using a ticketing system applied to an undisclosed array of linked list and list node structs:
+
+	typedef struct LinkedList {
+		LNODE *head;
+		LTICKET ticket;
+	} LINKED_LIST;
+
+	typedef struct ListNode {
+		void* data;
+		struct ListNode *next;
+	} LNODE;
+
+These structs are defined in linklib.c because neither the user nor routines outside of this file should have access to the structs or be able to modify their content/format. This addresses the dangerous implements and paranoia premises.

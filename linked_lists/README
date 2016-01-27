@@ -5,6 +5,8 @@ Run 'make' in the directory where the files are stored. To edit the exact gcc co
 
 After running make, run 'main.exe' or the executable out file created on make.
 
+To test out different routines, edit the main.c file and substitute existing command calls with your own. I know it's crude to manually edit the main.c file every single time you want to test stuff out... But such is life :)
+
 *** PREMISE ***
 
 This implementation of a linked list incorporates techniques described by Matt Bishop in his paper 'Robust Programming'. Of concern is how to structure files and design the content of their programs in such a way that "prevents abnormal termination of unexpected actions" and can "handle bad (invalid or absurd) inputs in a reasonable way". This implementation is premised on the principles of robust programming:
